@@ -38,38 +38,52 @@ function onTdClick(e){
     // 2) 칸에 X (또는 O) 입력
     td.innerText = turn;
 
-    // timeout 을 주지 않으면 innerText 에 turn 을 입력한 부분이 랜더링되기 전에 다음 로직이 실행됨.
+    // fixme: timeout 을 주지 않으면 innerText 에 turn 을 입력한 부분이 랜더링되기 전에 다음 로직이 실행되어 우선 timeout 으로 처리함.
     setTimeout(() => {
-        // 3) 승리 판정 후, 이번턴에 승리했으면 '승리 메시지' 를 화면에 보여줌
-        if(isThisTurnWin()){
-            alert(`GameOver! ${turn} Win!!`);
-            // 클릭 이벤트 리스너 해제
-            for(let i = 0 ; i < 3 ; i++){
-                blanks[i].forEach(item => item.removeEventListener('click', onTdClick));
-            }
-            // TODO : 게임 종료 및 재시작 버튼 노출 등 처리 (재시작 버튼 클릭 시 초기화)
-            return;
-        }
-
-
-
-        if(isAllBlankLoaded()){
-            alert('Draw!!');
-            // 클릭 이벤트 리스너 해제
-            for(let i = 0 ; i < 3 ; i++){
-                blanks[i].forEach(item => item.removeEventListener('click', onTdClick));
-            }
-            // TODO : 게임 종료 및 재시작 버튼 노출 등 처리 (재시작 버튼 클릭 시 초기화)
-            return;
-        }
-
-        changeTurn();
+        afterSetInnerTextAtTd();
     },100);
 }
 
-function isAllBlankLoaded() {
-    // TODO : 모든 칸에 X 또는 O 가 채워져 있으면, 무승부! && 게임 종료 (재시작 버튼 노출 등 처리)
-    return false;
+function afterSetInnerTextAtTd() {
+    // 3) 승리 판정 후, 이번턴에 승리했으면 '승리 메시지' 를 화면에 보여줌
+    if(isThisTurnWin()){
+        alert(`GameOver! ${turn} Win!!`);
+        // 클릭 이벤트 리스너 해제
+        for(let i = 0 ; i < 3 ; i++){
+            blanks[i].forEach(item => item.removeEventListener('click', onTdClick));
+        }
+        // TODO : 게임 종료 및 재시작 버튼 노출 등 처리 (재시작 버튼 클릭 시 초기화)
+        return;
+    }
+
+    // 4) 승리판정 실패 후, 확인했을 때 모든 칸이 채워져 있으면 '무승부 메시지' 를 화면에 보여줌.
+    if(!isBlankLeft()){
+        alert('Draw!!');
+        // 클릭 이벤트 리스너 해제
+        for(let i = 0 ; i < 3 ; i++){
+            blanks[i].forEach(item => item.removeEventListener('click', onTdClick));
+        }
+        // TODO : 게임 종료 및 재시작 버튼 노출 등 처리 (재시작 버튼 클릭 시 초기화)
+        return;
+    }
+
+    changeTurn();
+}
+
+/**
+ * 빈칸 존재 여부 판정
+ * @return {boolean}
+ */
+function isBlankLeft() {
+    let blankCount = 0;
+    blanks.forEach( row => {
+        row.forEach( col => {
+            if(col.innerText === ''){
+                blankCount++;
+            }
+        });
+    });
+    return blankCount !== 0;
 }
 
 /**
@@ -91,12 +105,12 @@ function isThisTurnWin(){
         }
     }
 
-    // 대각선 비교 1
+    // 대각선 비교 1 (\)
     if(blanks[0][0].innerText === turn && blanks[1][1].innerText === turn && blanks[2][2].innerText === turn){
         return true;
     }
 
-    // 대각선 비교 2
+    // 대각선 비교 2 (/)
     if(blanks[0][2].innerText === turn && blanks[1][1].innerText === turn && blanks[2][0].innerText === turn){
         return true;
     }
