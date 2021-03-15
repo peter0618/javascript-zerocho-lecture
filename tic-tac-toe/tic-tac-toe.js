@@ -20,7 +20,7 @@ for(let i = 0 ; i < 3 ; i++){
         blanks[i].push(td);
         tr.appendChild(td);
         // td.addEventListener('click', () =>{
-        //     td.innerText = turn;
+        //     td.textContent = turn;
         //     changeTurn();
         // });
         td.addEventListener('click', onTdClick);
@@ -31,7 +31,7 @@ body.appendChild(table);
 
 // 재시작 버튼 셋팅
 let restartButton = document.createElement('button');
-restartButton.innerText = '재시작';
+restartButton.textContent = '재시작';
 restartButton.style.visibility = 'hidden';
 restartButton.addEventListener('click', onRestart);
 body.appendChild(restartButton);
@@ -40,7 +40,7 @@ function onRestart(){
     // 1) 테이블 데이터 초기화 및 클릭 이벤트 리스너 추가
     blanks.forEach( row => {
         row.forEach( col => {
-            col.innerText = '';
+            col.textContent = '';
             col.addEventListener('click', onTdClick);
         });
     });
@@ -53,18 +53,28 @@ function onRestart(){
 
 function onTdClick(e){
     let td = e.target;
+    // 몇번째 줄 몇번째 칸인가?
+    blanks.forEach((row) => {
+        let columnNumber = row.indexOf(td);
+        if(columnNumber > -1){
+            console.log(`row number : ${blanks.indexOf(row)}, column number : ${columnNumber}`);
+        }
+    });
+    // console.log(td.parentNode); // 이 칸이 속한 줄
+    // console.log(td.parentNode.parentNode); // 테이블
+
     // 1) 이미 채워진 칸인지 확인
-    if(td.innerText === 'O' || td.innerText === 'X'){
+    if(td.textContent === 'O' || td.textContent === 'X'){
         alert('이미 채워진 칸입니다!');
         return;
     }
 
     // 2) 칸에 X (또는 O) 입력
-    td.innerText = turn;
-    // afterSetInnerTextAtTd();
-    // fixme: timeout 을 주지 않으면 innerText 에 turn 을 입력한 부분이 랜더링되기 전에 다음 로직이 실행되어 우선 timeout 으로 처리함.
+    td.textContent = turn;
+    // afterSetTextContentAtTd();
+    // fixme: timeout 을 주지 않으면 textContent 에 turn 을 입력한 부분이 랜더링되기 전에 다음 로직이 실행되어 우선 timeout 으로 처리함.
     setTimeout(() => {
-        afterSetInnerTextAtTd();
+        afterSetTextContentAtTd();
     },100);
 }
 
@@ -73,7 +83,7 @@ function afterEndingGame(){
     restartButton.style.visibility = 'visible';
 }
 
-function afterSetInnerTextAtTd() {
+function afterSetTextContentAtTd() {
     // 3) 승리 판정 후, 이번턴에 승리했으면 '승리 메시지' 를 화면에 보여줌
     if(isThisTurnWin()){
         alert(`GameOver! ${turn} Win!!`);
@@ -107,7 +117,7 @@ function isBlankLeft() {
     let blankCount = 0;
     blanks.forEach( row => {
         row.forEach( col => {
-            if(col.innerText === ''){
+            if(col.textContent === ''){
                 blankCount++;
             }
         });
@@ -122,25 +132,25 @@ function isBlankLeft() {
 function isThisTurnWin(){
     // 가로 비교
     for(let i = 0 ; i < 3 ; i++){
-        if(blanks[i][0].innerText === turn && blanks[i][1].innerText === turn && blanks[i][2].innerText === turn){
+        if(blanks[i][0].textContent === turn && blanks[i][1].textContent === turn && blanks[i][2].textContent === turn){
             return true;
         }
     }
 
     // 세로 비교
     for(let i = 0 ; i < 3 ; i++){
-        if(blanks[0][i].innerText === turn && blanks[1][i].innerText === turn && blanks[2][i].innerText === turn){
+        if(blanks[0][i].textContent === turn && blanks[1][i].textContent === turn && blanks[2][i].textContent === turn){
             return true;
         }
     }
 
     // 대각선 비교 1 (\)
-    if(blanks[0][0].innerText === turn && blanks[1][1].innerText === turn && blanks[2][2].innerText === turn){
+    if(blanks[0][0].textContent === turn && blanks[1][1].textContent === turn && blanks[2][2].textContent === turn){
         return true;
     }
 
     // 대각선 비교 2 (/)
-    if(blanks[0][2].innerText === turn && blanks[1][1].innerText === turn && blanks[2][0].innerText === turn){
+    if(blanks[0][2].textContent === turn && blanks[1][1].textContent === turn && blanks[2][0].textContent === turn){
         return true;
     }
 
