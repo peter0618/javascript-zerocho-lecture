@@ -8,6 +8,8 @@ function changeTurn(){
 }
 
 let body = document.body;
+
+// 테이블 셋팅
 let table = document.createElement('table');
 let blanks = []; // 3 X 3 metrics (9개이 td 와 각각 매핑됨)
 for(let i = 0 ; i < 3 ; i++){
@@ -27,6 +29,28 @@ for(let i = 0 ; i < 3 ; i++){
 }
 body.appendChild(table);
 
+// 재시작 버튼 셋팅
+let restartButton = document.createElement('button');
+restartButton.innerText = '재시작';
+restartButton.style.visibility = 'hidden';
+restartButton.addEventListener('click', onRestart);
+body.appendChild(restartButton);
+
+function onRestart(){
+    // 1) 테이블 데이터 초기화 및 클릭 이벤트 리스너 추가
+    blanks.forEach( row => {
+        row.forEach( col => {
+            col.innerText = '';
+            col.addEventListener('click', onTdClick);
+        });
+    });
+    // 2) 테이블 스타일 초기화
+    table.classList.remove('end-game-table');
+
+    // 3) 재시작 버튼 숨기기
+    restartButton.style.visibility = 'hidden';
+}
+
 function onTdClick(e){
     let td = e.target;
     // 1) 이미 채워진 칸인지 확인
@@ -37,11 +61,16 @@ function onTdClick(e){
 
     // 2) 칸에 X (또는 O) 입력
     td.innerText = turn;
-
+    // afterSetInnerTextAtTd();
     // fixme: timeout 을 주지 않으면 innerText 에 turn 을 입력한 부분이 랜더링되기 전에 다음 로직이 실행되어 우선 timeout 으로 처리함.
     setTimeout(() => {
         afterSetInnerTextAtTd();
     },100);
+}
+
+function afterEndingGame(){
+    table.classList.add('end-game-table');
+    restartButton.style.visibility = 'visible';
 }
 
 function afterSetInnerTextAtTd() {
@@ -52,7 +81,7 @@ function afterSetInnerTextAtTd() {
         for(let i = 0 ; i < 3 ; i++){
             blanks[i].forEach(item => item.removeEventListener('click', onTdClick));
         }
-        // TODO : 게임 종료 및 재시작 버튼 노출 등 처리 (재시작 버튼 클릭 시 초기화)
+        afterEndingGame();
         return;
     }
 
@@ -63,7 +92,7 @@ function afterSetInnerTextAtTd() {
         for(let i = 0 ; i < 3 ; i++){
             blanks[i].forEach(item => item.removeEventListener('click', onTdClick));
         }
-        // TODO : 게임 종료 및 재시작 버튼 노출 등 처리 (재시작 버튼 클릭 시 초기화)
+        afterEndingGame();
         return;
     }
 
@@ -117,5 +146,3 @@ function isThisTurnWin(){
 
     return false;
 }
-
-
