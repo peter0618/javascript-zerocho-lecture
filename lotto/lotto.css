@@ -1,0 +1,16 @@
+.flex-container{
+    display: flex;
+}
+.flex-container > .ball{
+    width: 100px;
+    height: 100px;
+    background: pink;
+    border-radius: 50%;
+    margin: 10px;
+    padding: 20px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 50px;
+
+    line-height: 108px;  /* 세로 정렬 */
+}
