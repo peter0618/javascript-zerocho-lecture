@@ -37,6 +37,7 @@ form.addEventListener('submit', (e) => {
     }
 
     tryCount++;
+    // input.value.split('') 를 적용해서 배열을 리턴합니다. 단 각각의 배열의 요소가 문자열이 되어버립니다.
     var trial = [];
     for(let number of input.value){
         trial.push(Number(number));
@@ -49,21 +50,14 @@ form.addEventListener('submit', (e) => {
     if(judgeResult !== 'Home Run'){
         let item = document.createElement('li');
         item.innerText = `${tryCount}회차 ${input.value} : ${judgeResult}`;
-        list.append(item);
+        list.append(item); // fixme : 이 부분이 랜더링 되기 전에 다음로직이 실행되어 최대 시도횟수 도달 alert 창이 뜹니다.
     } else {
         alert('정답입니다!!');
         let item = document.createElement('li');
         item.innerText = `${tryCount}회차 ${input.value} : ${judgeResult}`;
         list.append(item);
 
-        input.disabled = true;
-        button.disabled = true;
-        let h1 = document.createElement('h1')
-        h1.innerText = 'You Win!!';
-        dashboard.append(h1);
-        restartButton.disabled = false;
-        restartButton.style.display = 'block';
-
+        setEndingDisplay('You Win!!');
         return;
     }
 
@@ -71,13 +65,8 @@ form.addEventListener('submit', (e) => {
     if (tryCount === 10){
         alert('최대 시도횟수에 도달했습니다. GameOver!');
 
-        input.disabled = true;
-        button.disabled = true;
-        let h1 = document.createElement('h1')
-        h1.innerText = 'GameOver!!';
-        dashboard.append(h1);
-        restartButton.disabled = false;
-        restartButton.style.display = 'block';
+        setEndingDisplay(`GameOver!!. 정답은 ${answer.join('')}입니다.`);
+        return;
     }
 
     input.value = '';
@@ -143,16 +132,26 @@ function judge(trial, answer) {
     let countS = 0;
     let countB = 0;
     for(let i = 0 ; i < 4 ; i++){
-        for(let j = 0 ; j < 4 ; j++){
-            if(trial[i] === answer[j]){
-                if(i === j){
-                    countS++;
-                } else{
-                    countB++;
-                }
+        if(trial[i] === answer[i]){
+            countS++;
+        } else {
+            if(answer.indexOf(trial[i]) > -1 ) {
+                countB++;
             }
         }
     }
+    // 이중포문 안쓰고 위와같이 for 문 하나 돌리고, indexOf 로도 해결 가능
+    // for(let i = 0 ; i < 4 ; i++){
+    //     for(let j = 0 ; j < 4 ; j++){
+    //         if(trial[i] === answer[j]){
+    //             if(i === j){
+    //                 countS++;
+    //             } else{
+    //                 countB++;
+    //             }
+    //         }
+    //     }
+    // }
     if(countS === 0 && countB === 0){
         return 'Out';
     }
@@ -170,4 +169,14 @@ function judge(trial, answer) {
         result += `${countB}B`;
     }
     return result;
+}
+
+function setEndingDisplay(message) {
+    input.disabled = true;
+    button.disabled = true;
+    let h1 = document.createElement('h1')
+    h1.innerText = message;
+    dashboard.append(h1);
+    restartButton.disabled = false;
+    restartButton.style.display = 'block';
 }
