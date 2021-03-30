@@ -4,13 +4,28 @@
 .flex-container > .ball{
     width: 100px;
     height: 100px;
-    background: pink;
     border-radius: 50%;
     margin: 10px;
     padding: 20px;
     text-align: center;
     font-weight: bold;
     font-size: 50px;
+    color: limegreen;
 
     line-height: 108px;  /* 세로 정렬 */
+}
+.flex-container > .red {
+    background: red;
+}
+.flex-container > .orange {
+    background: orange;
+}
+.flex-container > .yellow {
+    background: yellow;
+}
+.flex-container > .blue {
+    background: blue;
+}
+.flex-container > .green {
+    background: green;
 }

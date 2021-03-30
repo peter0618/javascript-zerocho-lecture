@@ -67,13 +67,54 @@ function makeLotteryBalls(){
 
 /**
  * 해당 숫자로 ball 을 화면에 그립니다.
- * TODO : 각 숫자 범위 별 ball/text 색상 변경 적용
  * @param number
  */
 function drawBall(number){
     // console.log(`${number}번 공을 뽑았다!`);
+    const color = selectColorByNumber(number);
     let ball = document.createElement('div');
-    ball.classList.add('ball');
+    ball.classList.add('ball', color);
     ball.textContent = String(number);
     container.appendChild(ball);
+}
+
+/**
+ * 입력받은 숫자에 대한 색상을 리턴합니다.
+ * @param number
+ * @return {string}
+ */
+function selectColorByNumber(number){
+    const RED = 'red';
+    const ORANGE = 'orange';
+    const YELLOW = 'yellow';
+    const BLUE = 'blue';
+    const GREEN = 'green';
+    const PINK = 'pink';
+
+    switch(Math.ceil(number/10)){
+        case 1:
+            return RED;
+        case 2:
+            return ORANGE;
+        case 3:
+            return YELLOW;
+        case 4:
+            return BLUE;
+        case 5:
+            return GREEN;
+        default:
+            return PINK;
+    }
+
+    // if(number <= 10){ // 1 ~ 10 : 빨간색
+    //     return RED;
+    // } else if(number <= 20){ // 11 ~ 20 : 주황색
+    //     return ORANGE;
+    // } else if(number <= 30){ // 21 ~ 30 : 노란색
+    //     return YELLOW;
+    // } else if(number <= 40){ // 31 ~ 40 : 파란색
+    //     return BLUE;
+    // } else { // 41 ~ 45 : 초록색
+    //     return GREEN;
+    // }
 }
