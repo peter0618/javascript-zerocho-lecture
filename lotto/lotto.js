@@ -1,6 +1,8 @@
 
 let body = document.body;
-let container = body.getElementsByClassName('flex-container').item(0);
+// let container = body.getElementsByClassName('flex-container').item(0);
+// MEMO : getElementByXX 말고 querySelector 를 사용할 수 도 있습니다.
+let container = body.querySelector('.flex-container');
 
 main();
 
@@ -54,15 +56,20 @@ function chooseRandomIntegerBetweenTwoIntegers(a, b){
 }
 
 /**
- * 로또 추첨할 공들의 배열을 생성합니다.
+ * 로또 추첨할 공들의 배열을 생성합니다. (1 to 45)
  * @return {[]}
  */
 function makeLotteryBalls(){
-    let result = [];
-    for(let i = 1 ; i <= 45 ; i++){
-        result.push(i);
-    }
-    return result;
+    // let result = [];
+    // for(let i = 1 ; i <= 45 ; i++){
+    //     result.push(i);
+    // }
+    // return result;
+    return Array(45)
+        .fill()
+        .map((value, index) => {
+            return index + 1;
+        });
 }
 
 /**
